@@ -1,0 +1,7 @@
+service: default
+runtime: python37
+env: flex
+entrypoint: gunicorn -b :$PORT main:app
+
+manual_scaling:
+  instances: 1
