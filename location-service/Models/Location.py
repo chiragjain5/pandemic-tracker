@@ -4,8 +4,8 @@ from __init__ import db, ma
 class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(50), db.ForeignKey('user.id'), nullable=False)
-    latitude = db.Column(db.Float, index=False, unique=False, nullable=False)
-    longitude = db.Column(db.Float, index=False, unique=False, nullable=False)
+    latitude = db.Column(db.Float(precision=32, decimal_return_scale=None), index=False, unique=False, nullable=False)
+    longitude = db.Column(db.Float(precision=32, decimal_return_scale=None), index=False, unique=False, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
 
     user = db.relationship('User', foreign_keys='Location.user_id')
