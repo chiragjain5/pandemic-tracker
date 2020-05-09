@@ -48,7 +48,8 @@ def generate_notification():
     for location in current_user_locations:
         current_latitude, current_longitude = location.latitude, location.longitude
         for location2 in other_user_locations:
-            if distance(current_latitude, current_longitude, location2.latitude, location2.longitude) <= 30:
+            time_elapsed = abs(location2.created_at - location.created_at)
+            if distance(current_latitude, current_longitude, location2.latitude, location2.longitude) <= 30 and time_elapsed.total_seconds() <= 600:
                 users_to_notify.add(location2.user_id)
 
     if users_to_notify:
