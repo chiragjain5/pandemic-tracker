@@ -26,7 +26,7 @@ def generate_notification():
     with app.app_context():
         msg = Message(subject="Hello",
                       sender=app.config.get("MAIL_USERNAME"),
-                      recipients=user_id,  # replace with your email for testing
+                      recipients=[user_id],  # replace with your email for testing
                       body="Hi, \r\n You were in proximity of a person in the last 14 days who is currently infected from Cov-19 \r\n Please quarantine yourself and help protect others \r\n Thank you")
     mail.send(msg)
     return {"message": "success"}, 200
