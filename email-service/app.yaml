@@ -1,4 +1,4 @@
-service: default
+service: email-notification-service
 runtime: python
 env: flex
 entrypoint: gunicorn -b :$PORT --threads=4 main:app

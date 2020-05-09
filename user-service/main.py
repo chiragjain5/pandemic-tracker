@@ -1,6 +1,12 @@
 from flask import Flask, request, jsonify
 from __init__ import app, db, ma
 from Models import User
+from google.cloud import tasks
+from os import environ, path
+from dotenv import load_dotenv
+
+basedir = path.abspath(path.dirname(__file__))
+load_dotenv(path.join(basedir, '.env'))
 
 db.create_all()
 
@@ -56,12 +62,37 @@ def update_infection():
 
     user.is_diseased = is_diseased
     db.session.commit()
+    send_to_queue(id)
     user_schema = User.UserSchema()
     data = user_schema.dump(user)
     data['message'] = "User infection status updated"
     return data, 200
     # if is_diseased:
 
+def send_to_queue(user):
+    client = tasks.CloudTasksClient()
+
+    project = environ.get('PROJECT_ID')
+    location = environ.get('NOTIFICATION_QUEUE_LOCATION')
+    notification_queue = environ.get('NOTIFICATION_QUEUE')
+
+    parent = client.queue_path(project, location, notification_queue)
+    task = {
+        'app_engine_http_request': {
+            'http_method': 'POST',
+            'relative_uri': '/generate-notification',
+            'app_engine_routing': {
+                'service': 'notification-service'
+            },
+            'headers': {
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps({'user_id': user}).encode()
+        }
+    }
+
+    response = client.create_task(parent, task)
+    print(response)
 
 #Run Server
 if __name__ == '__main__':
