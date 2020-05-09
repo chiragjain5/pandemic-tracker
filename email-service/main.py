@@ -24,10 +24,10 @@ def generate_notification():
     user_id = request.json['user_id']
 
     with app.app_context():
-        msg = Message(subject="Hello",
+        msg = Message(subject="[Urgent] Get yourself tested for COVID-19 and quarantine.",
                       sender=app.config.get("MAIL_USERNAME"),
                       recipients=[user_id],  # replace with your email for testing
-                      body="Hi, \r\n You were in proximity of a person in the last 14 days who is currently infected from Cov-19 \r\n Please quarantine yourself and help protect others \r\n Thank you")
+                      body="Hello, \r\nGreetings for the day. \r\nYou were in proximity of a person in the last 14 days who is currently infected from COVID-19. We highly recommend you to get yourself tested as soon as possible and quarantine yourself to prevent the spread of virus.\r\nStay Home, Stay Safe. \r\nBest Regards,\r\nPandemic Response Team ")
     mail.send(msg)
     return {"message": "success"}, 200
 
