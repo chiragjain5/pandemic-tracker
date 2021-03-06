@@ -1,0 +1,12 @@
+service: email-notification-service
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT --threads=4 main:app
+beta_settings:
+        cloud_sql_instances: track-pandemic:us-central1:my-instance
+
+manual_scaling:
+  instances: 1
+
+runtime_config:
+    python_version: 3
